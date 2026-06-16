@@ -1,55 +1,37 @@
 "use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
-import { updateProduct } from "@/app/actions/mipyme";
+import { X, Shield } from "lucide-react";
+import { createAdmin } from "@/app/actions/admin";
 import { useRouter } from "next/navigation";
 
-export function EditProductModal({
-  product,
+export function CreateAdminModal({
   onCloseAction,
-  userId,
 }: {
-  product: { id: string; name: string; quantity: number; price: number };
   onCloseAction: () => void;
-  userId: string;
 }) {
   const router = useRouter();
-  const [name, setName] = useState(product.name);
-  const [quantity, setQuantity] = useState(String(product.quantity));
-  const [price, setPrice] = useState(String(product.price));
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name || !quantity || !price) {
+    if (!username || !password) {
       setError("Todos los campos son requeridos");
       return;
     }
-    const qty = parseInt(quantity, 10);
-    const prc = parseFloat(price);
-    if (isNaN(qty) || qty < 0) {
-      setError("Cantidad inválida");
-      return;
-    }
-    if (isNaN(prc) || prc < 0) {
-      setError("Precio inválido");
-      return;
-    }
-
     setLoading(true);
     setError("");
-    const res = await updateProduct(
-      product.id,
-      { name, quantity: qty, price: prc },
-      userId,
-    );
-    if (res.success) {
+
+    const result = await createAdmin({ username, password });
+
+    if (result.success) {
       router.refresh();
       onCloseAction();
     } else {
-      setError(res.error || "Error");
+      setError(result.error || "Error al crear el admin");
       setLoading(false);
     }
   }
@@ -61,7 +43,10 @@ export function EditProductModal({
         className="bg-surface w-full max-w-sm mx-auto p-5"
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-sm">Editar Producto</h2>
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-accent" />
+            <h2 className="font-semibold text-sm">Crear Admin</h2>
+          </div>
           <button
             type="button"
             onClick={onCloseAction}
@@ -73,34 +58,22 @@ export function EditProductModal({
 
         <div className="space-y-3">
           <div>
-            <label className="text-xs text-muted-foreground">Nombre</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
-            />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground">Cantidad</label>
-            <input
-              type="number"
-              min="0"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
-            />
-          </div>
-          <div>
             <label className="text-xs text-muted-foreground">
-              Precio (CUP)
+              Nombre de usuario
             </label>
             <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
+            />
+          </div>
+          <div>
+            <label className="text-xs text-muted-foreground">Contraseña</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
             />
           </div>
@@ -113,7 +86,7 @@ export function EditProductModal({
           disabled={loading}
           className="w-full mt-4 py-2.5 text-sm font-medium text-background bg-accent cursor-pointer disabled:opacity-50"
         >
-          {loading ? "Guardando..." : "Guardar Cambios"}
+          {loading ? "Creando..." : "Crear Admin"}
         </button>
       </form>
     </div>

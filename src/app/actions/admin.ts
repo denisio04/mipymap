@@ -81,6 +81,28 @@ export async function deleteMipyme(id: string) {
   return { success: true };
 }
 
+export async function createAdmin(data: {
+  username: string;
+  password: string;
+}) {
+  const existing = await prisma.user.findUnique({ where: { username: data.username } });
+  if (existing) {
+    return { success: false, error: 'Este nombre de usuario ya existe' };
+  }
+
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+
+  await prisma.user.create({
+    data: {
+      username: data.username,
+      password: hashedPassword,
+      role: 'ADMIN',
+    },
+  });
+
+  return { success: true };
+}
+
 export async function resetMipymeCountdown(id: string) {
   await prisma.mipyme.update({
     where: { id },

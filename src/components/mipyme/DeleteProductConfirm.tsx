@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 export function DeleteProductConfirm({
   product,
-  onCloseAction,
+  onCloseAction: onClose,
   userId,
 }: {
   product: { id: string; name: string };

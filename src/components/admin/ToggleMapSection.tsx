@@ -23,7 +23,7 @@ export function ToggleMapSection({
         </button>
       </div>
       {visible && (
-        <div className="h-300px border border-border">
+        <div className="h-[300px] border border-border">
           <AdminMapContainer mipymes={mipymes} />
         </div>
       )}

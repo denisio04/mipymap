@@ -1,0 +1,21 @@
+{
+  "name": "MipyMap",
+  "short_name": "MipyMap",
+  "description": "Directorio interactivo de MiPyMEs en Cienfuegos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/tienda.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/tienda.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

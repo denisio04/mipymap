@@ -14,8 +14,8 @@ export default async function MipymeDashboard() {
   return (
     <div className="space-y-6">
       <div className="border border-border p-4">
-        <div className="flex justify-between items-center">
-          <h2 className="font-semibold text-sm">{mipyme?.name}</h2>
+        <div className="flex ">
+          <h2 className="font-semibold text-sm mb-2">{mipyme?.name}</h2>
           <div>
             {mipyme && (
               <LiveCounter mipymeId={mipyme.id} initial={mipyme.interactions} />
