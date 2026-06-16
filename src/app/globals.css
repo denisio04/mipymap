@@ -1,0 +1,84 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme inline {
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-surface-hover: #334155;
+    --color-foreground: #f1f5f9;
+    --color-muted: #94a3b8;
+    --color-muted-foreground: #64748b;
+    --color-border: #334155;
+    --color-border-light: #475569;
+    --color-accent: #38bdf8;
+    --color-accent-hover: #7dd3fc;
+    --color-success: #22c55e;
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+
+    --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, monospace;
+
+    --radius-none: 0px;
+    --radius-sm: 0px;
+    --radius: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
+    --radius-2xl: 0px;
+    --radius-3xl: 0px;
+}
+
+body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+}
+
+input,
+button,
+textarea,
+select {
+    font-family: var(--font-sans);
+}
+
+/* --- Leaflet popup overrides (brutalist dark, semi-transparent) --- */
+.leaflet-popup {
+    margin-bottom: 12px !important;
+}
+
+.leaflet-popup-content-wrapper {
+    background: rgba(15, 23, 42, 0.97) !important;
+    color: var(--color-foreground) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6) !important;
+    border: none !important;
+    padding: 0 !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+.leaflet-popup-tip {
+    background: rgba(15, 23, 42, 0.97) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    min-height: 0 !important;
+    line-height: 1 !important;
+    font-size: inherit !important;
+}
+
+.leaflet-popup-content > * {
+    margin: 0 !important;
+}
+
+.leaflet-popup-content p {
+    margin: 0 !important;
+    line-height: 1.25 !important;
+}
+
+.leaflet-popup-close-button {
+    display: none !important;
+}

@@ -1,0 +1,73 @@
+"use client";
+
+import { useState } from "react";
+import { SearchView } from "@/components/SearchView";
+import type { SortFilter } from "@/components/SearchView";
+import { ListFilter } from "lucide-react";
+
+const FILTERS: {
+  key: SortFilter;
+  label: string;
+}[] = [
+  { key: "cheapest", label: "Más barato" },
+  { key: "proximity", label: "Cercanía" },
+  { key: "transfer", label: "Transferencia" },
+];
+
+export default function ListaPage() {
+  const [showFilters, setShowFilters] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<SortFilter[]>([]);
+
+  function handleToggle(value: SortFilter) {
+    setActiveFilters((prev) =>
+      prev.includes(value) ? prev.filter((f) => f !== value) : [...prev, value],
+    );
+  }
+
+  return (
+    <div className="p-4 sm:p-6 lg:p-8 max-w-2xl mx-auto">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-lg font-semibold">Lista de Productos</h1>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className={`flex items-center gap-1.5 text-sm transition-colors cursor-pointer ${
+            showFilters || activeFilters.length > 0
+              ? "text-accent"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <ListFilter className="w-4 h-4" />
+          Filtros
+          {activeFilters.length > 0 && (
+            <span className="text-[10px] bg-accent text-background font-medium px-1.5 py-0.5 leading-none">
+              {activeFilters.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {showFilters && (
+        <div className="flex gap-2 mb-4">
+          {FILTERS.map(({ key, label }) => {
+            const active = activeFilters.includes(key);
+            return (
+              <button
+                key={key}
+                onClick={() => handleToggle(key)}
+                className={`px-3 py-2 text-xs font-medium border transition-colors cursor-pointer ${
+                  active
+                    ? "bg-accent text-background border-accent"
+                    : "bg-surface text-muted-foreground border-border hover:border-accent hover:text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      <SearchView activeFilters={activeFilters} />
+    </div>
+  );
+}

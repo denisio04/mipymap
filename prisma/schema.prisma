@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  role      String   @default("MIPYME")
+  mipyme    Mipyme?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("users")
+}
+
+model Mipyme {
+  id              String    @id @default(uuid())
+  name            String
+  lat             Float
+  lng             Float
+  acceptsTransfer Boolean   @default(false)
+  province        String    @default("Cienfuegos")
+  municipality    String    @default("Cienfuegos")
+  image           String?
+  interactions    Int       @default(0)
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products        Product[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  @@map("mipymes")
+}
+
+model Product {
+  id        String   @id @default(uuid())
+  name      String
+  quantity  Int      @default(0)
+  price     Float
+  mipymeId  String
+  mipyme    Mipyme   @relation(fields: [mipymeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("products")
+}
