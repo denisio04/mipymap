@@ -33,7 +33,7 @@ export function ProductModal({
   }
 
   return (
-    <div className="fixed inset-0 z-9999 bg-black/60 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-[999999] bg-black/60 flex items-end sm:items-center justify-center">
       <div
         className="w-full max-w-sm mx-auto max-h-[70vh] overflow-y-auto border border-[#334155]"
         style={{ background: "rgba(15, 23, 42, 0.97)" }}
