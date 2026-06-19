@@ -54,7 +54,7 @@ function PhoneActions({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-[9999999] bg-black/60 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-9999999 bg-black/60 flex items-center justify-center p-4">
       <div className="bg-surface w-full max-w-xs mx-auto p-5 border border-border">
         <p className="text-sm font-medium text-center mb-4">{number.label}</p>
         <div className="flex flex-col gap-2">
@@ -94,7 +94,7 @@ export function FaqModal({ onCloseAction }: { onCloseAction: () => void }) {
   >(null);
 
   return (
-    <div className="fixed inset-0 z-[999999] bg-black/60 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-999999 bg-black/60 flex items-end sm:items-center justify-center">
       <div
         className="w-full max-w-lg mx-auto max-h-[85vh] overflow-y-auto border border-border"
         style={{ background: "rgba(15, 23, 42, 0.97)" }}
@@ -144,9 +144,10 @@ export function FaqModal({ onCloseAction }: { onCloseAction: () => void }) {
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>
-                <strong>Necesitas pan:</strong> Abres MipyMap, buscas &ldquo;pan&rdquo; en
-                la búsqueda de productos, y te muestra todas las mipymes que
-                venden pan cerca de ti, ordenadas por precio o distancia.
+                <strong>Necesitas pan:</strong> Abres MipyMap, buscas
+                &ldquo;pan&rdquo; en la búsqueda de productos, y te muestra
+                todas las mipymes que venden pan cerca de ti, ordenadas por
+                precio o distancia.
               </li>
               <li>
                 <strong>Quieres saber si una mipyme está abierta:</strong> El
@@ -180,13 +181,14 @@ export function FaqModal({ onCloseAction }: { onCloseAction: () => void }) {
                 negocio y sus productos.
               </li>
               <li>
-                Usa la lupa o la página de &ldquo;Buscar&rdquo; para encontrar productos
-                específicos por su nombre (ej: &ldquo;arroz&rdquo;, &ldquo;pan&rdquo;, &ldquo;huevos&rdquo;).
+                Usa la lupa o la página de &ldquo;Buscar&rdquo; para encontrar
+                productos específicos por su nombre (ej: &ldquo;arroz&rdquo;,
+                &ldquo;pan&rdquo;, &ldquo;huevos&rdquo;).
               </li>
               <li>
-                En la página &ldquo;Lista&rdquo; puedes filtrar los resultados por más
-                baratos, cercanía, transferencia, o solo los que están abiertos
-                ahora.
+                En la página &ldquo;Lista&rdquo; puedes filtrar los resultados
+                por más baratos, cercanía, transferencia, o solo los que están
+                abiertos ahora.
               </li>
               <li>
                 Para ver tu ubicación en el mapa, toca el botón con el ícono de
@@ -203,7 +205,10 @@ export function FaqModal({ onCloseAction }: { onCloseAction: () => void }) {
                 El administrador registra tu mipyme y te da un usuario y
                 contraseña.
               </li>
-              <li>Entras en &ldquo;Iniciar Sesión&rdquo; con tu usuario y contraseña.</li>
+              <li>
+                Entras en &ldquo;Iniciar Sesión&rdquo; con tu usuario y
+                contraseña.
+              </li>
               <li>
                 Una vez dentro, puedes agregar, editar o eliminar tus productos,
                 y controlar cuánto stock tienes disponible.

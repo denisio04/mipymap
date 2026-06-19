@@ -24,6 +24,8 @@ model Mipyme {
   lat             Float
   lng             Float
   acceptsTransfer Boolean   @default(false)
+  openingTime     String?
+  closingTime     String?
   province        String    @default("Cienfuegos")
   municipality    String    @default("Cienfuegos")
   image           String?
