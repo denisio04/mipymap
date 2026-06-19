@@ -10,6 +10,8 @@ export interface MipymeWithProducts {
   lat: number;
   lng: number;
   acceptsTransfer: boolean;
+  openingTime: string | null;
+  closingTime: string | null;
   province: string;
   municipality: string;
   image: string | null;
@@ -24,6 +26,8 @@ export interface SearchResult {
   mipymeId: string;
   mipymeName: string;
   acceptsTransfer: boolean;
+  openingTime: string | null;
+  closingTime: string | null;
   mipymeImage: string | null;
   mipymeLat: number;
   mipymeLng: number;

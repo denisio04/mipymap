@@ -13,6 +13,8 @@ interface MipymeItem {
   lat: number;
   lng: number;
   acceptsTransfer: boolean;
+  openingTime: string | null;
+  closingTime: string | null;
   province: string;
   municipality: string;
   image: string | null;
@@ -125,13 +127,20 @@ export function MipymeList({ mipymes }: { mipymes: MipymeItem[] }) {
               </div>
             </div>
             <div className="flex items-center justify-between mt-3 text-xs">
-              <span
-                className={m.acceptsTransfer ? "text-foreground" : "text-muted"}
-              >
-                {m.acceptsTransfer
-                  ? "Acepta transferencia"
-                  : "No acepta transferencia"}
-              </span>
+              <div className="flex gap-3">
+                <span
+                  className={m.acceptsTransfer ? "text-foreground" : "text-muted"}
+                >
+                  {m.acceptsTransfer
+                    ? "Acepta transferencia"
+                    : "No acepta transferencia"}
+                </span>
+                {m.openingTime && m.closingTime && (
+                  <span className="text-muted-foreground">
+                    {m.openingTime} - {m.closingTime}
+                  </span>
+                )}
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setEditing(m)}

@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { SearchView } from "@/components/SearchView";
 import type { SortFilter } from "@/components/SearchView";
-import { ListFilter } from "lucide-react";
+import { ListFilter, TrendingDown, MapPin, ArrowLeftRight, Clock } from "lucide-react";
 
 const FILTERS: {
   key: SortFilter;
   label: string;
+  icon: React.ReactNode;
 }[] = [
-  { key: "cheapest", label: "Más barato" },
-  { key: "proximity", label: "Cercanía" },
-  { key: "transfer", label: "Transferencia" },
+  { key: "cheapest", label: "Más barato", icon: <TrendingDown className="w-3.5 h-3.5" /> },
+  { key: "proximity", label: "Cercanía", icon: <MapPin className="w-3.5 h-3.5" /> },
+  { key: "transfer", label: "Transferencia", icon: <ArrowLeftRight className="w-3.5 h-3.5" /> },
+  { key: "opennow", label: "Abierto", icon: <Clock className="w-3.5 h-3.5" /> },
 ];
 
 export default function ListaPage() {
@@ -47,19 +49,23 @@ export default function ListaPage() {
       </div>
 
       {showFilters && (
-        <div className="flex gap-2 mb-4">
-          {FILTERS.map(({ key, label }) => {
+        <div className="flex flex-wrap gap-2 mb-4">
+          {FILTERS.map(({ key, label, icon }) => {
             const active = activeFilters.includes(key);
+            const isOpenNow = key === "opennow";
             return (
               <button
                 key={key}
                 onClick={() => handleToggle(key)}
-                className={`px-3 py-2 text-xs font-medium border transition-colors cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium border transition-colors cursor-pointer ${
                   active
-                    ? "bg-accent text-background border-accent"
+                    ? isOpenNow
+                      ? "bg-[#22c55e] text-background border-[#22c55e]"
+                      : "bg-accent text-background border-accent"
                     : "bg-surface text-muted-foreground border-border hover:border-accent hover:text-foreground"
                 }`}
               >
+                {icon}
                 {label}
               </button>
             );

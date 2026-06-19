@@ -15,6 +15,9 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import type { MutableRefObject } from "react";
 import { createPortal } from "react-dom";
 import { ProductModal } from "./ProductModal";
+import { FaqModal } from "./FaqModal";
+import { isOpenNow } from "@/lib/utils";
+import { Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -72,6 +75,7 @@ function MarkerPopup({
   onSelect: (m: MipymeWithProducts) => void;
 }) {
   const map = useMap();
+  const open = isOpenNow(mipyme.openingTime, mipyme.closingTime);
 
   return (
     <Marker position={[mipyme.lat, mipyme.lng]}>
@@ -91,7 +95,22 @@ function MarkerPopup({
           <div className="flex flex-col gap-2 px-3 py-2.5">
             <div className="py-2 text-center">
               <p className="text-sm font-medium">{mipyme.name}</p>
-              <p className="text-[14px] text-muted-foreground/70 mt-0.5">
+              {mipyme.openingTime && mipyme.closingTime && (
+                <p className="text-xs text-muted-foreground/70 mt-0.5">
+                  {mipyme.openingTime} - {mipyme.closingTime}
+                </p>
+              )}
+              <p
+                className="text-xs mt-1"
+                style={{ color: open ? "#22c55e" : "#ef4444" }}
+              >
+                {mipyme.openingTime && mipyme.closingTime
+                  ? open
+                    ? "Abierto ahora"
+                    : "Cerrado"
+                  : "Horario no definido"}
+              </p>
+              <p className="text-[14px] text-muted-foreground/70 mt-1">
                 {mipyme.acceptsTransfer
                   ? "Acepta transferencia"
                   : "No acepta transferencia"}
@@ -132,19 +151,25 @@ export function MapView({
     null,
   );
   const [tracking, setTracking] = useState(false);
+  const [showOpenOnly, setShowOpenOnly] = useState(false);
+  const [showFaq, setShowFaq] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const watchIdRef = useRef<number | null>(null);
   const hasFlownRef = useRef(false);
   const focusId = selectedMipymeId ?? null;
 
-  const visible = tracking
+  let visible = tracking
     ? focusId
       ? mipymes.filter((m) => m.id === focusId)
       : []
     : focusId
       ? mipymes.filter((m) => m.id === focusId)
       : mipymes;
+
+  if (showOpenOnly) {
+    visible = visible.filter((m) => isOpenNow(m.openingTime, m.closingTime));
+  }
 
   const flyLat = focusId && flyToLat !== undefined ? flyToLat : null;
   const flyLng = focusId && flyToLng !== undefined ? flyToLng : null;
@@ -249,29 +274,65 @@ export function MapView({
 
       {typeof window !== "undefined" &&
         createPortal(
-          <div className="fixed bottom-6 right-6 z-99999 flex flex-col items-end gap-2">
-            {geoError && (
-              <div className="bg-[#5c1a1a] border border-[#7d2424] text-white text-xs px-3 py-1.5 shadow-xl whitespace-nowrap">
-                {geoError}
-              </div>
-            )}
-            <button
-              onClick={() => {
-                tracking ? handleLocateOff() : handleLocateOn();
-              }}
-              data-active={tracking ? "true" : "false"}
-              className="flex items-center justify-center border shadow-xl cursor-pointer"
-              style={{
-                width: 48,
-                height: 48,
-                background: tracking ? "#38bdf8" : "#0f172a",
-                color: tracking ? "#0f172a" : "#f1f5f9",
-                borderColor: tracking ? "#38bdf8" : "#475569",
-              }}
-            >
-              {locateIcon}
-            </button>
-          </div>,
+          <>
+            {/* Right side: filters + locate */}
+            <div className="fixed bottom-6 right-6 z-99999 flex flex-col items-end gap-2">
+              {geoError && (
+                <div className="bg-[#5c1a1a] border border-[#7d2424] text-white text-xs px-3 py-1.5 shadow-xl whitespace-nowrap">
+                  {geoError}
+                </div>
+              )}
+              <button
+                onClick={() => setShowOpenOnly(!showOpenOnly)}
+                data-active={showOpenOnly ? "true" : "false"}
+                className="flex items-center justify-center border shadow-xl cursor-pointer"
+                style={{
+                  width: 48,
+                  height: 48,
+                  background: showOpenOnly ? "#38bdf8" : "#0f172a",
+                  color: showOpenOnly ? "#0f172a" : "#f1f5f9",
+                  borderColor: showOpenOnly ? "#38bdf8" : "#475569",
+                }}
+                title={showOpenOnly ? "Mostrar todas" : "Solo abiertas ahora"}
+              >
+                <Clock className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => {
+                  tracking ? handleLocateOff() : handleLocateOn();
+                }}
+                data-active={tracking ? "true" : "false"}
+                className="flex items-center justify-center border shadow-xl cursor-pointer"
+                style={{
+                  width: 48,
+                  height: 48,
+                  background: tracking ? "#38bdf8" : "#0f172a",
+                  color: tracking ? "#0f172a" : "#f1f5f9",
+                  borderColor: tracking ? "#38bdf8" : "#475569",
+                }}
+              >
+                {locateIcon}
+              </button>
+            </div>
+
+            {/* Left side: FAQ button */}
+            <div className="fixed bottom-6 left-6 z-99999 flex flex-col items-start gap-2">
+              <button
+                onClick={() => setShowFaq(true)}
+                className="flex items-center justify-center border shadow-xl cursor-pointer"
+                style={{
+                  width: 48,
+                  height: 48,
+                  background: "#0f172a",
+                  color: "#f1f5f9",
+                  borderColor: "#475569",
+                }}
+                title="Preguntas frecuentes"
+              >
+                <span className="text-lg font-bold">?</span>
+              </button>
+            </div>
+          </>,
           document.body,
         )}
 
@@ -303,6 +364,8 @@ export function MapView({
           onCloseAction={() => setSelected(null)}
         />
       )}
+
+      {showFaq && <FaqModal onCloseAction={() => setShowFaq(false)} />}
     </div>
   );
 }

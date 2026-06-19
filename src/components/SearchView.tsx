@@ -6,9 +6,10 @@ import { useDebounce } from 'use-debounce';
 import { searchProducts } from '@/app/actions/search';
 import { MipymeResultCard } from './MipymeResultCard';
 import { DEBOUNCE_MS, CIENFUEGOS_CENTER } from '@/lib/constants';
+import { isOpenNow } from '@/lib/utils';
 import type { SearchResult } from '@/types';
 
-export type SortFilter = 'cheapest' | 'proximity' | 'transfer';
+export type SortFilter = 'cheapest' | 'proximity' | 'transfer' | 'opennow';
 
 function groupByMipyme(results: SearchResult[]) {
   const map = new Map<
@@ -17,6 +18,8 @@ function groupByMipyme(results: SearchResult[]) {
       mipymeName: string;
       mipymeImage: string | null;
       acceptsTransfer: boolean;
+      openingTime: string | null;
+      closingTime: string | null;
       mipymeLat: number;
       mipymeLng: number;
       products: { productId: string; productName: string; price: number }[];
@@ -30,6 +33,8 @@ function groupByMipyme(results: SearchResult[]) {
         mipymeName: r.mipymeName,
         mipymeImage: r.mipymeImage,
         acceptsTransfer: r.acceptsTransfer,
+        openingTime: r.openingTime,
+        closingTime: r.closingTime,
         mipymeLat: r.mipymeLat,
         mipymeLng: r.mipymeLng,
         products: [],
@@ -60,6 +65,10 @@ function applyFilters(
   // filter
   if (activeFilters.includes('transfer')) {
     filtered = filtered.filter((g) => g.acceptsTransfer);
+  }
+
+  if (activeFilters.includes('opennow')) {
+    filtered = filtered.filter((g) => isOpenNow(g.openingTime, g.closingTime));
   }
 
   if (filtered.length === 0) return filtered;
@@ -117,8 +126,6 @@ export function SearchView({ activeFilters }: { activeFilters?: SortFilter[] }) 
   }, []);
 
   useEffect(() => {
-    if (debouncedQuery.length < 1) return;
-
     let active = true;
     startTransition(() => { setLoading(true); });
     searchProducts(debouncedQuery).then((data) => {
@@ -164,10 +171,14 @@ export function SearchView({ activeFilters }: { activeFilters?: SortFilter[] }) 
         </div>
       )}
 
-      {!loading && debouncedQuery.length > 0 && filteredGroups.length === 0 && (
+      {!loading && filteredGroups.length === 0 && (
         <div className="flex flex-col items-center py-12 text-muted">
           <Search className="w-10 h-10 mb-3" />
-          <p className="text-sm">No se encontraron productos</p>
+          <p className="text-sm">
+            {debouncedQuery
+              ? "No se encontraron productos"
+              : "No hay mipymes disponibles"}
+          </p>
         </div>
       )}
 
@@ -180,9 +191,12 @@ export function SearchView({ activeFilters }: { activeFilters?: SortFilter[] }) 
               mipymeName={group.mipymeName}
               mipymeImage={group.mipymeImage}
               acceptsTransfer={group.acceptsTransfer}
+              openingTime={group.openingTime}
+              closingTime={group.closingTime}
               mipymeLat={group.mipymeLat}
               mipymeLng={group.mipymeLng}
               products={group.products}
+              showProducts={debouncedQuery.length > 0}
             />
           ))}
         </div>

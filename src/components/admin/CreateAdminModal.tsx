@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Shield } from "lucide-react";
+import { X, Shield, Eye, EyeOff } from "lucide-react";
 import { createAdmin } from "@/app/actions/admin";
 import { useRouter } from "next/navigation";
 
@@ -13,6 +13,7 @@ export function CreateAdminModal({
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -70,12 +71,21 @@ export function CreateAdminModal({
           </div>
           <div>
             <label className="text-xs text-muted-foreground">Contraseña</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
-            />
+            <div className="relative mt-1">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         </div>
 

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { X, Search } from "lucide-react";
-import { formatCUP } from "@/lib/utils";
+import { formatCUP, isOpenNow, formatTimeRange } from "@/lib/utils";
 import type { MipymeWithProducts } from "@/types";
 
 export function ProductModal({
@@ -40,7 +40,25 @@ export function ProductModal({
       >
         <div className="px-5 pt-4 pb-3">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="font-semibold text-base">{mipyme.name}</h2>
+            <div>
+              <h2 className="font-semibold text-base">{mipyme.name}</h2>
+              {mipyme.openingTime && mipyme.closingTime && (
+                <p
+                  className="text-xs mt-0.5"
+                  style={{
+                    color: isOpenNow(mipyme.openingTime, mipyme.closingTime)
+                      ? "#22c55e"
+                      : "#ef4444",
+                  }}
+                >
+                  {formatTimeRange(mipyme.openingTime, mipyme.closingTime)}
+                  {" — "}
+                  {isOpenNow(mipyme.openingTime, mipyme.closingTime)
+                    ? "Abierto"
+                    : "Cerrado"}
+                </p>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleSearch}

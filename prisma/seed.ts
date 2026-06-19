@@ -99,6 +99,10 @@ async function main() {
     const lng = randomFloat(-80.47, -80.42);
     const municipality = pick(MUNICIPALITIES);
 
+    // 2 mipymes con horario nocturno (abiertas a 1:53 AM), el resto diurno
+    const openingTime = i <= 2 ? "22:00" : "08:00";
+    const closingTime = i <= 2 ? "06:00" : "17:00";
+
     await prisma.user.create({
       data: {
         username: `mipyme${i}`,
@@ -110,6 +114,8 @@ async function main() {
             lat,
             lng,
             acceptsTransfer: Math.random() > 0.4,
+            openingTime,
+            closingTime,
             province: "Cienfuegos",
             municipality,
             image: `https://placehold.co/400x400/1e293b/38bdf8?text=Mipyme+${i}`,

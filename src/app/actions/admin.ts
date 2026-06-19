@@ -7,6 +7,8 @@ export async function createMipyme(data: {
   name: string;
   password: string;
   acceptsTransfer: boolean;
+  openingTime?: string | null;
+  closingTime?: string | null;
   province: string;
   municipality: string;
   lat: number;
@@ -31,6 +33,8 @@ export async function createMipyme(data: {
           lat: data.lat,
           lng: data.lng,
           acceptsTransfer: data.acceptsTransfer,
+          openingTime: data.openingTime ?? null,
+          closingTime: data.closingTime ?? null,
           province: data.province,
           municipality: data.municipality,
           image: data.image ?? null,
@@ -47,6 +51,8 @@ export async function updateMipyme(
   data: {
     name: string;
     acceptsTransfer: boolean;
+    openingTime?: string | null;
+    closingTime?: string | null;
     province: string;
     municipality: string;
     image?: string | null;
@@ -77,7 +83,15 @@ export async function updateMipyme(
 }
 
 export async function deleteMipyme(id: string) {
-  await prisma.mipyme.delete({ where: { id } });
+  const mipyme = await prisma.mipyme.findUnique({
+    where: { id },
+    select: { userId: true },
+  });
+
+  if (mipyme) {
+    await prisma.user.delete({ where: { id: mipyme.userId } });
+  }
+
   return { success: true };
 }
 
