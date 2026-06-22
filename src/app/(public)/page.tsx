@@ -12,7 +12,8 @@ export default async function HomePage(props: {
   const mipymes = await prisma.mipyme.findMany({
     include: {
       products: {
-        select: { id: true, name: true, quantity: true, price: true },
+        where: { active: true },
+        select: { id: true, name: true, price: true },
       },
     },
   });

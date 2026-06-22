@@ -14,23 +14,17 @@ export function CreateProductModal({
 }) {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name || !quantity || !price) {
+    if (!name || !price) {
       setError("Todos los campos son requeridos");
       return;
     }
-    const qty = parseInt(quantity, 10);
     const prc = parseFloat(price);
-    if (isNaN(qty) || qty < 0) {
-      setError("Cantidad inválida");
-      return;
-    }
     if (isNaN(prc) || prc < 0) {
       setError("Precio inválido");
       return;
@@ -39,7 +33,7 @@ export function CreateProductModal({
     setLoading(true);
     setError("");
     const res = await createProduct(
-      { name, quantity: qty, price: prc },
+      { name, price: prc },
       userId,
     );
     if (res.success) {
@@ -75,16 +69,6 @@ export function CreateProductModal({
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
-            />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground">Cantidad</label>
-            <input
-              type="number"
-              min="0"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
               className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
             />
           </div>

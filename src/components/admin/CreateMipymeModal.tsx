@@ -22,6 +22,8 @@ export function CreateMipymeModal({
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [acceptsTransfer, setAcceptsTransfer] = useState(false);
+  const [delivery, setDelivery] = useState(false);
+  const [phone, setPhone] = useState("");
   const [openingTime, setOpeningTime] = useState("");
   const [closingTime, setClosingTime] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -71,6 +73,8 @@ export function CreateMipymeModal({
       name,
       password,
       acceptsTransfer,
+      delivery,
+      phone: delivery ? (phone || null) : null,
       openingTime: openingTime || null,
       closingTime: closingTime || null,
       image: imageUrl,
@@ -214,6 +218,34 @@ export function CreateMipymeModal({
               Acepta Transferencia
             </label>
           </div>
+          <div>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                checked={delivery}
+                onChange={(e) => {
+                  setDelivery(e.target.checked);
+                  if (!e.target.checked) setPhone("");
+                }}
+                className="accent-accent"
+              />
+              Hace domicilios
+            </label>
+          </div>
+          {delivery && (
+            <div>
+              <label className="text-xs text-muted-foreground">
+                Teléfono / Contacto
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+53 5XXX XXXX"
+                className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
+              />
+            </div>
+          )}
         </div>
 
         {error && <p className="text-xs text-danger mt-3">{error}</p>}

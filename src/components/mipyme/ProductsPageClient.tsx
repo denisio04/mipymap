@@ -8,8 +8,8 @@ import Link from 'next/link';
 interface ProductItem {
   id: string;
   name: string;
-  quantity: number;
   price: number;
+  active: boolean;
 }
 
 export function ProductsPageClient({

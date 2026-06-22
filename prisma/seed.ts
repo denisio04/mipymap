@@ -114,6 +114,8 @@ async function main() {
             lat,
             lng,
             acceptsTransfer: Math.random() > 0.4,
+            delivery: i % 3 === 0,
+            phone: i % 3 === 0 ? `+53 5${String(Math.floor(Math.random() * 90000000) + 10000000)}` : null,
             openingTime,
             closingTime,
             province: "Cienfuegos",
@@ -124,7 +126,6 @@ async function main() {
                 const productName = pick(PRODUCT_POOL);
                 return {
                   name: productName,
-                  quantity: Math.floor(Math.random() * 100) + 1,
                   price: randomFloat(10, 500),
                 };
               }),

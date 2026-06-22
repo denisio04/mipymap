@@ -5,11 +5,12 @@ import { MipymeList } from '@/components/admin/MipymeList';
 export default async function AdminPage() {
   const mipymes = await prisma.mipyme.findMany({
     include: {
-      products: { select: { id: true, name: true, quantity: true, price: true } },
+      products: { select: { id: true, name: true, price: true } },
       user: { select: { username: true } },
     },
     orderBy: { createdAt: 'desc' },
   });
+
 
   return (
     <div className="space-y-6">

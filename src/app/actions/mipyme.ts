@@ -19,7 +19,7 @@ export async function getMyProducts(userId: string) {
 }
 
 export async function createProduct(
-  data: { name: string; quantity: number; price: number },
+  data: { name: string; price: number },
   userId: string
 ) {
   const mipyme = await prisma.mipyme.findUnique({ where: { userId } });
@@ -28,8 +28,8 @@ export async function createProduct(
   await prisma.product.create({
     data: {
       name: data.name,
-      quantity: data.quantity,
       price: data.price,
+      active: true,
       mipymeId: mipyme.id,
     },
   });
@@ -38,7 +38,7 @@ export async function createProduct(
 
 export async function updateProduct(
   id: string,
-  data: { name: string; quantity: number; price: number },
+  data: { name: string; price: number; active: boolean },
   userId: string
 ) {
   const product = await prisma.product.findUnique({
@@ -51,30 +51,9 @@ export async function updateProduct(
 
   await prisma.product.update({
     where: { id },
-    data: { name: data.name, quantity: data.quantity, price: data.price },
+    data: { name: data.name, price: data.price, active: data.active },
   });
   return { success: true };
-}
-
-export async function adjustStock(
-  id: string,
-  delta: number,
-  userId: string
-) {
-  const product = await prisma.product.findUnique({
-    where: { id },
-    include: { mipyme: { select: { userId: true } } },
-  });
-  if (!product || product.mipyme.userId !== userId) {
-    return { success: false, error: 'No autorizado' };
-  }
-
-  const newQuantity = Math.max(0, product.quantity + delta);
-  await prisma.product.update({
-    where: { id },
-    data: { quantity: newQuantity },
-  });
-  return { success: true, newQuantity };
 }
 
 export async function deleteProduct(id: string, userId: string) {

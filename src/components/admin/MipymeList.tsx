@@ -13,6 +13,8 @@ interface MipymeItem {
   lat: number;
   lng: number;
   acceptsTransfer: boolean;
+  delivery: boolean;
+  phone: string | null;
   openingTime: string | null;
   closingTime: string | null;
   province: string;
@@ -107,7 +109,7 @@ export function MipymeList({ mipymes }: { mipymes: MipymeItem[] }) {
                       <p
                         className="text-2xl mt-6 whitespace-nowrap"
                         style={{
-                          color: remaining <= 5 ? "#ef4444" : "#38bdf8",
+                          color: remaining <= 5 ? "#ef4444" : "#4ade80",
                         }}
                       >
                         {remaining} día{remaining !== 1 ? "s" : ""}
@@ -127,7 +129,7 @@ export function MipymeList({ mipymes }: { mipymes: MipymeItem[] }) {
               </div>
             </div>
             <div className="flex items-center justify-between mt-3 text-xs">
-              <div className="flex gap-3">
+              <div className="flex gap-3 flex-wrap">
                 <span
                   className={m.acceptsTransfer ? "text-foreground" : "text-muted"}
                 >
@@ -135,6 +137,11 @@ export function MipymeList({ mipymes }: { mipymes: MipymeItem[] }) {
                     ? "Acepta transferencia"
                     : "No acepta transferencia"}
                 </span>
+                {m.delivery && (
+                  <span className="text-accent">
+                    Hace domicilio{m.phone ? ` (${m.phone})` : ""}
+                  </span>
+                )}
                 {m.openingTime && m.closingTime && (
                   <span className="text-muted-foreground">
                     {m.openingTime} - {m.closingTime}

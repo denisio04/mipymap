@@ -9,7 +9,7 @@ import { DEBOUNCE_MS, CIENFUEGOS_CENTER } from '@/lib/constants';
 import { isOpenNow } from '@/lib/utils';
 import type { SearchResult } from '@/types';
 
-export type SortFilter = 'cheapest' | 'proximity' | 'transfer' | 'opennow';
+export type SortFilter = 'cheapest' | 'proximity' | 'transfer' | 'opennow' | 'delivery';
 
 function groupByMipyme(results: SearchResult[]) {
   const map = new Map<
@@ -18,6 +18,8 @@ function groupByMipyme(results: SearchResult[]) {
       mipymeName: string;
       mipymeImage: string | null;
       acceptsTransfer: boolean;
+      delivery: boolean;
+      phone: string | null;
       openingTime: string | null;
       closingTime: string | null;
       mipymeLat: number;
@@ -33,6 +35,8 @@ function groupByMipyme(results: SearchResult[]) {
         mipymeName: r.mipymeName,
         mipymeImage: r.mipymeImage,
         acceptsTransfer: r.acceptsTransfer,
+        delivery: r.delivery,
+        phone: r.phone,
         openingTime: r.openingTime,
         closingTime: r.closingTime,
         mipymeLat: r.mipymeLat,
@@ -69,6 +73,10 @@ function applyFilters(
 
   if (activeFilters.includes('opennow')) {
     filtered = filtered.filter((g) => isOpenNow(g.openingTime, g.closingTime));
+  }
+
+  if (activeFilters.includes('delivery')) {
+    filtered = filtered.filter((g) => g.delivery);
   }
 
   if (filtered.length === 0) return filtered;
@@ -191,6 +199,8 @@ export function SearchView({ activeFilters }: { activeFilters?: SortFilter[] }) 
               mipymeName={group.mipymeName}
               mipymeImage={group.mipymeImage}
               acceptsTransfer={group.acceptsTransfer}
+              delivery={group.delivery}
+              phone={group.phone}
               openingTime={group.openingTime}
               closingTime={group.closingTime}
               mipymeLat={group.mipymeLat}

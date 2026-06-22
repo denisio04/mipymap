@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SearchView } from "@/components/SearchView";
 import type { SortFilter } from "@/components/SearchView";
-import { ListFilter, TrendingDown, MapPin, ArrowLeftRight, Clock } from "lucide-react";
+import { ListFilter, TrendingDown, MapPin, ArrowLeftRight, Clock, Truck } from "lucide-react";
 
 const FILTERS: {
   key: SortFilter;
@@ -14,6 +14,7 @@ const FILTERS: {
   { key: "proximity", label: "Cercanía", icon: <MapPin className="w-3.5 h-3.5" /> },
   { key: "transfer", label: "Transferencia", icon: <ArrowLeftRight className="w-3.5 h-3.5" /> },
   { key: "opennow", label: "Abierto", icon: <Clock className="w-3.5 h-3.5" /> },
+  { key: "delivery", label: "Domicilio", icon: <Truck className="w-3.5 h-3.5" /> },
 ];
 
 export default function ListaPage() {

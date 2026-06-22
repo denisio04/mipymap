@@ -13,6 +13,8 @@ interface MipymeResultCardProps {
   mipymeName: string;
   mipymeImage: string | null;
   acceptsTransfer: boolean;
+  delivery: boolean;
+  phone: string | null;
   openingTime: string | null;
   closingTime: string | null;
   mipymeLat: number;
@@ -25,6 +27,8 @@ export function MipymeResultCard({
   mipymeName,
   mipymeImage,
   acceptsTransfer,
+  delivery,
+  phone,
   openingTime,
   closingTime,
   mipymeLat,
@@ -58,6 +62,11 @@ export function MipymeResultCard({
             {acceptsTransfer && (
               <span className="text-[10px] font-medium text-foreground border border-border-light px-1.5 py-0.5 inline-block">
                 Acepta Transferencia
+              </span>
+            )}
+            {delivery && (
+              <span className="text-[10px] font-medium text-accent border border-accent px-1.5 py-0.5 inline-block">
+                Domicilio{phone ? ` (${phone})` : ""}
               </span>
             )}
             {openingTime && closingTime && (

@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -29,6 +29,8 @@ model Mipyme {
   province        String    @default("Cienfuegos")
   municipality    String    @default("Cienfuegos")
   image           String?
+  delivery        Boolean   @default(false)
+  phone           String?
   interactions    Int       @default(0)
   userId          String    @unique
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -41,7 +43,7 @@ model Mipyme {
 model Product {
   id        String   @id @default(uuid())
   name      String
-  quantity  Int      @default(0)
+  active    Boolean  @default(true)
   price     Float
   mipymeId  String
   mipyme    Mipyme   @relation(fields: [mipymeId], references: [id], onDelete: Cascade)

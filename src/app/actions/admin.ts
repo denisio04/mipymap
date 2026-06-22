@@ -7,6 +7,8 @@ export async function createMipyme(data: {
   name: string;
   password: string;
   acceptsTransfer: boolean;
+  delivery: boolean;
+  phone?: string | null;
   openingTime?: string | null;
   closingTime?: string | null;
   province: string;
@@ -33,6 +35,8 @@ export async function createMipyme(data: {
           lat: data.lat,
           lng: data.lng,
           acceptsTransfer: data.acceptsTransfer,
+          delivery: data.delivery,
+          phone: data.phone ?? null,
           openingTime: data.openingTime ?? null,
           closingTime: data.closingTime ?? null,
           province: data.province,
@@ -51,6 +55,8 @@ export async function updateMipyme(
   data: {
     name: string;
     acceptsTransfer: boolean;
+    delivery: boolean;
+    phone?: string | null;
     openingTime?: string | null;
     closingTime?: string | null;
     province: string;

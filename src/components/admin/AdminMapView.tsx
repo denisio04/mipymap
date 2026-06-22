@@ -103,9 +103,9 @@ function LocateButton({
         style={{
           width: 40,
           height: 40,
-          background: tracking ? "#38bdf8" : "#0f172a",
+          background: tracking ? "#4ade80" : "#0f172a",
           color: tracking ? "#0f172a" : "#f1f5f9",
-          borderColor: tracking ? "#38bdf8" : "#475569",
+          borderColor: tracking ? "#4ade80" : "#475569",
         }}
         title={tracking ? "Dejar de mostrar ubicación" : "Mostrar mi ubicación"}
       >
@@ -139,8 +139,8 @@ function PositionCircle({
       center={[position.lat, position.lng]}
       radius={30}
       pathOptions={{
-        color: "#38bdf8",
-        fillColor: "#38bdf8",
+        color: "#4ade80",
+        fillColor: "#4ade80",
         fillOpacity: 0.25,
         weight: 2,
       }}

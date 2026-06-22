@@ -5,23 +5,18 @@ import { Plus } from 'lucide-react';
 import { CreateProductModal } from './CreateProductModal';
 import { EditProductModal } from './EditProductModal';
 import { DeleteProductConfirm } from './DeleteProductConfirm';
-import { StockModal } from './StockModal';
 
 interface ProductItem {
   id: string;
   name: string;
-  quantity: number;
   price: number;
+  active: boolean;
 }
 
 export function ProductList({ products, userId, searchQuery }: { products: ProductItem[]; userId: string; searchQuery?: string }) {
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<ProductItem | null>(null);
   const [deleting, setDeleting] = useState<ProductItem | null>(null);
-  const [stockAdjust, setStockAdjust] = useState<{
-    product: ProductItem;
-    mode: 'increase' | 'decrease';
-  } | null>(null);
 
   const filtered = searchQuery
     ? products.filter((p) =>
@@ -48,11 +43,17 @@ export function ProductList({ products, userId, searchQuery }: { products: Produ
           {filtered.map((p) => (
             <div key={p.id} className="border border-border p-4">
               <div className="flex items-start justify-between">
-                <div>
+                <div className="flex items-center gap-2">
                   <p className="font-semibold text-sm">{p.name}</p>
-                  <p className="text-xs text-muted mt-0.5">
-                    {p.quantity} en inventario
-                  </p>
+                  <span
+                    className={`text-[10px] font-medium px-1.5 py-0.5 leading-none ${
+                      p.active
+                        ? "text-[#22c55e] border border-[#22c55e]"
+                        : "text-muted-foreground border border-border-light"
+                    }`}
+                  >
+                    {p.active ? "Activo" : "Inactivo"}
+                  </span>
                 </div>
                 <p className="font-semibold text-sm">{(p.price).toFixed(2)} CUP</p>
               </div>
@@ -62,18 +63,6 @@ export function ProductList({ products, userId, searchQuery }: { products: Produ
                   className="text-xs text-muted-foreground underline cursor-pointer"
                 >
                   Editar
-                </button>
-                <button
-                  onClick={() => setStockAdjust({ product: p, mode: 'increase' })}
-                  className="text-xs text-accent underline cursor-pointer"
-                >
-                  + Stock
-                </button>
-                <button
-                  onClick={() => setStockAdjust({ product: p, mode: 'decrease' })}
-                  className="text-xs text-accent underline cursor-pointer"
-                >
-                  - Stock
                 </button>
                 <button
                   onClick={() => setDeleting(p)}
@@ -93,14 +82,6 @@ export function ProductList({ products, userId, searchQuery }: { products: Produ
       )}
       {deleting && (
         <DeleteProductConfirm product={deleting} onCloseAction={() => setDeleting(null)} userId={userId} />
-      )}
-      {stockAdjust && (
-        <StockModal
-          product={stockAdjust.product}
-          mode={stockAdjust.mode}
-          onCloseAction={() => setStockAdjust(null)}
-          userId={userId}
-        />
       )}
       </>
   );

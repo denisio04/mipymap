@@ -10,29 +10,24 @@ export function EditProductModal({
   onCloseAction,
   userId,
 }: {
-  product: { id: string; name: string; quantity: number; price: number };
+  product: { id: string; name: string; price: number; active: boolean };
   onCloseAction: () => void;
   userId: string;
 }) {
   const router = useRouter();
   const [name, setName] = useState(product.name);
-  const [quantity, setQuantity] = useState(String(product.quantity));
   const [price, setPrice] = useState(String(product.price));
+  const [active, setActive] = useState(product.active);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name || !quantity || !price) {
+    if (!name || !price) {
       setError("Todos los campos son requeridos");
       return;
     }
-    const qty = parseInt(quantity, 10);
     const prc = parseFloat(price);
-    if (isNaN(qty) || qty < 0) {
-      setError("Cantidad inválida");
-      return;
-    }
     if (isNaN(prc) || prc < 0) {
       setError("Precio inválido");
       return;
@@ -42,7 +37,7 @@ export function EditProductModal({
     setError("");
     const res = await updateProduct(
       product.id,
-      { name, quantity: qty, price: prc },
+      { name, price: prc, active },
       userId,
     );
     if (res.success) {
@@ -81,15 +76,28 @@ export function EditProductModal({
               className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
             />
           </div>
-          <div>
-            <label className="text-xs text-muted-foreground">Cantidad</label>
-            <input
-              type="number"
-              min="0"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
-            />
+          <div className="flex items-center gap-3">
+            <label className="text-xs text-muted-foreground cursor-pointer" htmlFor="product-active">
+              Producto Activo
+            </label>
+            <button
+              id="product-active"
+              type="button"
+              role="switch"
+              aria-checked={active}
+              onClick={() => setActive(!active)}
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border transition-colors ${
+                active
+                  ? "border-accent bg-accent"
+                  : "border-border-light bg-surface"
+              }`}
+            >
+              <span
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-background transition-transform ${
+                  active ? "translate-x-4" : "translate-x-0.5"
+                }`}
+              />
+            </button>
           </div>
           <div>
             <label className="text-xs text-muted-foreground">

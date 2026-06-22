@@ -93,15 +93,10 @@ function MarkerPopup({
             </div>
           )}
           <div className="flex flex-col gap-2 px-3 py-2.5">
-            <div className="py-2 text-center">
-              <p className="text-sm font-medium">{mipyme.name}</p>
-              {mipyme.openingTime && mipyme.closingTime && (
-                <p className="text-xs text-muted-foreground/70 mt-0.5">
-                  {mipyme.openingTime} - {mipyme.closingTime}
-                </p>
-              )}
+            <div className=" text-center">
+              <p className="text-lg font-medium">{mipyme.name}</p>
               <p
-                className="text-xs mt-1"
+                className="text-xs mt-2"
                 style={{ color: open ? "#22c55e" : "#ef4444" }}
               >
                 {mipyme.openingTime && mipyme.closingTime
@@ -110,7 +105,7 @@ function MarkerPopup({
                     : "Cerrado"
                   : "Horario no definido"}
               </p>
-              <p className="text-[14px] text-muted-foreground/70 mt-1">
+              <p className="text-sm text-muted-foreground/70 mt-1">
                 {mipyme.acceptsTransfer
                   ? "Acepta transferencia"
                   : "No acepta transferencia"}
@@ -122,6 +117,14 @@ function MarkerPopup({
             >
               Ver Productos
             </button>
+            {mipyme.delivery && mipyme.phone && (
+              <a
+                href={`https://wa.me/${mipyme.phone?.replace(/[^0-9]/g, '')}`}
+                className="block w-full text-xs font-bold text-center text-[#0a0a0a] bg-accent border border-accent px-3 py-1.5 cursor-pointer hover:opacity-90 transition-opacity no-underline"
+              >
+                Hacer Pedido
+              </a>
+            )}
             <button
               onClick={() => map.closePopup()}
               className="w-full text-xs font-medium text-white bg-[#5c1a1a] border border-[#7d2424] px-3 py-1.5 cursor-pointer hover:bg-[#7d2424] transition-colors"
@@ -289,9 +292,9 @@ export function MapView({
                 style={{
                   width: 48,
                   height: 48,
-                  background: showOpenOnly ? "#38bdf8" : "#0f172a",
+                  background: showOpenOnly ? "#4ade80" : "#0f172a",
                   color: showOpenOnly ? "#0f172a" : "#f1f5f9",
-                  borderColor: showOpenOnly ? "#38bdf8" : "#475569",
+                  borderColor: showOpenOnly ? "#4ade80" : "#475569",
                 }}
                 title={showOpenOnly ? "Mostrar todas" : "Solo abiertas ahora"}
               >
@@ -306,9 +309,9 @@ export function MapView({
                 style={{
                   width: 48,
                   height: 48,
-                  background: tracking ? "#38bdf8" : "#0f172a",
+                  background: tracking ? "#4ade80" : "#0f172a",
                   color: tracking ? "#0f172a" : "#f1f5f9",
-                  borderColor: tracking ? "#38bdf8" : "#475569",
+                  borderColor: tracking ? "#4ade80" : "#475569",
                 }}
               >
                 {locateIcon}

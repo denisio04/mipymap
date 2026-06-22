@@ -10,7 +10,7 @@ export function EditMipymeModal({
   mipyme,
   onCloseAction,
 }: {
-  mipyme: { id: string; name: string; acceptsTransfer: boolean; openingTime: string | null; closingTime: string | null; province: string; municipality: string; image: string | null };
+  mipyme: { id: string; name: string; acceptsTransfer: boolean; delivery: boolean; phone: string | null; openingTime: string | null; closingTime: string | null; province: string; municipality: string; image: string | null };
   onCloseAction: () => void;
 }) {
   const router = useRouter();
@@ -20,6 +20,8 @@ export function EditMipymeModal({
   const [acceptsTransfer, setAcceptsTransfer] = useState(
     mipyme.acceptsTransfer,
   );
+  const [delivery, setDelivery] = useState(mipyme.delivery);
+  const [phone, setPhone] = useState(mipyme.phone ?? "");
   const [openingTime, setOpeningTime] = useState(mipyme.openingTime ?? "");
   const [closingTime, setClosingTime] = useState(mipyme.closingTime ?? "");
   const [file, setFile] = useState<File | null>(null);
@@ -75,6 +77,8 @@ export function EditMipymeModal({
     await updateMipyme(mipyme.id, {
       name,
       acceptsTransfer,
+      delivery,
+      phone: delivery ? (phone || null) : null,
       openingTime: openingTime || null,
       closingTime: closingTime || null,
       image: imageUrl,
@@ -230,6 +234,32 @@ export function EditMipymeModal({
             />
             Acepta Transferencia
           </label>
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              checked={delivery}
+              onChange={(e) => {
+                setDelivery(e.target.checked);
+                if (!e.target.checked) setPhone("");
+              }}
+              className="accent-accent"
+            />
+            Hace domicilios
+          </label>
+          {delivery && (
+            <div>
+              <label className="text-xs text-muted-foreground">
+                Teléfono / Contacto
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+53 5XXX XXXX"
+                className="w-full mt-1 px-3 py-2 text-sm border border-border-light bg-background text-foreground focus:outline-none focus:border-accent"
+              />
+            </div>
+          )}
         </div>
 
         {error && <p className="text-xs text-danger mt-3">{error}</p>}
